@@ -1,22 +1,12 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "@/pages/LoginPage";
 import { getToken } from "@/services/token";
+import DashboardLayout from "@/page-components/dashboard/DashboardLayout";
+import DashboardPage from "@/pages/DashboardPage";
+import EntriesPlaceholder from "@/pages/EntriesPlaceholder";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return getToken() ? children : <Navigate to="/login" replace />;
-}
-
-function DashboardPlaceholder() {
-  return (
-    <main className="min-h-screen bg-slate-50 p-8">
-      <h1 className="text-2xl font-semibold text-slate-900">
-        Overview Dashboard
-      </h1>
-      <p className="mt-2 text-slate-600">
-        Authentication successful. We will build the dashboard next.
-      </p>
-    </main>
-  );
 }
 
 export default function App() {
@@ -31,13 +21,15 @@ export default function App() {
         />
 
         <Route
-          path="/dashboard"
           element={
             <ProtectedRoute>
-              <DashboardPlaceholder />
+              <DashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="/entries" element={<EntriesPlaceholder />} />
+        </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

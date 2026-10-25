@@ -99,14 +99,6 @@ export default function LoginPage() {
                   Understand visitor activity across your venue.
                 </p>
               </div>
-
-              <div className="rounded-2xl border border-white/10 bg-white/4 p-4">
-                <ShieldCheck className="mb-4 text-teal-300" size={22} />
-                <p className="font-medium text-white">Secure access</p>
-                <p className="mt-1 text-sm leading-5 text-slate-400">
-                  Sign in to access your operational workspace.
-                </p>
-              </div>
             </div>
           </div>
 
