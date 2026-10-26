@@ -16,8 +16,8 @@ export default function DashboardLayout() {
             <Activity size={20} />
           </div>
           <div>
-            <p className="font-semibold tracking-tight">CrowdWatch</p>
-            <p className="text-xs text-slate-500">Crowd management</p>
+            <p className="font-semibold tracking-tight">Crowd Management</p>
+            <p className="text-xs text-slate-500">Easy Monitoring </p>
           </div>
         </div>
 

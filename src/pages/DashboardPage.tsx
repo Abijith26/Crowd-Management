@@ -98,6 +98,8 @@ export default function DashboardPage() {
   const [sitesError, setSitesError] = useState("");
   const [dataError, setDataError] = useState("");
 
+  const [dataRetryKey, setDataRetryKey] = useState(0);
+
   const selectedSite = useMemo(
     () => sites.find((site) => site.siteId === selectedSiteId),
     [sites, selectedSiteId],
@@ -212,7 +214,7 @@ export default function DashboardPage() {
     return () => {
       cancelled = true;
     };
-  }, [selectedSiteId, range]);
+  }, [selectedSiteId, range, dataRetryKey]);
 
   const latestOccupancy = data?.occupancy.buckets.at(-1)?.avg;
 
@@ -230,14 +232,11 @@ export default function DashboardPage() {
       <header className="border-b border-slate-200 bg-white px-4 py-5 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-sm font-medium text-indigo-600">
-              CROWD MANAGEMENT
-            </p>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-950">
               Overview
             </h1>
             <p className="mt-1 text-sm text-slate-500">
-              Monitor occupancy and visitor activity at your site.
+              Monitor occupancy and visitor activity for a site.
             </p>
           </div>
 
@@ -295,36 +294,20 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {sitesError && (
+        {(dataError || sitesError) && (
           <div
             role="alert"
             className="flex flex-wrap items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
           >
             <AlertCircle size={19} />
-            <span className="flex-1">{sitesError}</span>
+            <span className="flex-1">{dataError || sitesError}</span>
             <button
               type="button"
-              onClick={() => window.location.reload()}
-              className="font-semibold underline underline-offset-2"
+              onClick={() => setDataRetryKey((current) => current + 1)}
+              disabled={dataLoading}
+              className="font-semibold underline underline-offset-2 disabled:opacity-50"
             >
-              Retry
-            </button>
-          </div>
-        )}
-
-        {dataError && (
-          <div
-            role="alert"
-            className="flex flex-wrap items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
-          >
-            <AlertCircle size={19} />
-            <span className="flex-1">{dataError}</span>
-            <button
-              type="button"
-              onClick={() => setRange((current) => current)}
-              className="font-semibold underline underline-offset-2"
-            >
-              Dismiss
+              {dataLoading ? "Retrying..." : "Retry"}
             </button>
           </div>
         )}
@@ -402,34 +385,6 @@ export default function DashboardPage() {
         )}
 
         <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          {/* <section className="rounded-xl border border-slate-200 bg-white p-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="font-semibold text-slate-900">
-                  Occupancy over time
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  Average occupancy per time bucket
-                </p>
-              </div>
-              <Activity size={19} className="text-indigo-600" />
-            </div>
-
-            {dataLoading ? (
-              <div className="mt-5 h-56 animate-pulse rounded-lg bg-slate-100" />
-            ) : data?.occupancy.buckets.length ? (
-              <div className="mt-5 space-y-3">
-                <p className="text-sm text-slate-600">
-                  {data.occupancy.buckets.length} data points received. Chart
-                  visualization is the next step.
-                </p>
-              </div>
-            ) : (
-              <p className="mt-6 text-sm text-slate-500">
-                Occupancy trend data is not available for this range.
-              </p>
-            )}
-          </section> */}
           <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -445,6 +400,10 @@ export default function DashboardPage() {
 
             {dataLoading ? (
               <div className="mt-5 h-64 animate-pulse rounded-lg bg-slate-100" />
+            ) : dataError ? (
+              <p className="mt-6 text-sm text-red-700">
+                Unable to load occupancy data. Check your connection and retry.
+              </p>
             ) : occupancyChartData.length > 0 ? (
               <div className="mt-5 h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -498,34 +457,6 @@ export default function DashboardPage() {
             )}
           </section>
 
-          {/* <section className="rounded-xl border border-slate-200 bg-white p-5">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h2 className="font-semibold text-slate-900">
-                  Visitor demographics
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  Male and female counts by hour
-                </p>
-              </div>
-              <Users size={19} className="text-indigo-600" />
-            </div>
-
-            {dataLoading ? (
-              <div className="mt-5 h-56 animate-pulse rounded-lg bg-slate-100" />
-            ) : data?.demographics.buckets.length ? (
-              <div className="mt-5 space-y-3">
-                <p className="text-sm text-slate-600">
-                  {data.demographics.buckets.length} data points received. Chart
-                  visualization is the next step.
-                </p>
-              </div>
-            ) : (
-              <p className="mt-6 text-sm text-slate-500">
-                Demographic data is not available for this range.
-              </p>
-            )}
-          </section> */}
           <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
@@ -541,6 +472,11 @@ export default function DashboardPage() {
 
             {dataLoading ? (
               <div className="mt-5 h-64 animate-pulse rounded-lg bg-slate-100" />
+            ) : dataError ? (
+              <p className="mt-6 text-sm text-red-700">
+                Unable to load demographic data. Check your connection and
+                retry.
+              </p>
             ) : demographicsChartData.length > 0 ? (
               <div className="mt-5 h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
