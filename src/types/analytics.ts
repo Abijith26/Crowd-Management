@@ -50,3 +50,33 @@ export interface DemographicsResponse extends TimeRangeRequest {
   timezone: string;
   buckets: DemographicsBucket[];
 }
+
+// Crowd Entries Page
+
+export interface EntryExitRecord {
+  personId: string;
+  personName: string;
+  gender: string;
+  zoneId: string;
+  zoneName: string;
+  severity: "high" | "medium" | "low" | string;
+  entryUtc: number;
+  entryLocal: string;
+  exitUtc: number | null;
+  exitLocal: string | null;
+  dwellMinutes: number | null;
+}
+
+export interface EntryExitRequest {
+  siteId: string;
+  fromUtc: number;
+  toUtc: number;
+  pageSize: number;
+  pageNumber: number;
+}
+
+export interface EntryExitResponse extends EntryExitRequest {
+  totalRecords: number;
+  totalPages: number;
+  records: EntryExitRecord[];
+}

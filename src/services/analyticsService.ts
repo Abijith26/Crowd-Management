@@ -6,6 +6,8 @@ import type {
   FootfallResponse,
   DwellResponse,
   DemographicsResponse,
+  EntryExitRequest,
+  EntryExitResponse,
 } from "@/types/analytics";
 
 export function getSites(): Promise<Site[]> {
@@ -45,6 +47,17 @@ export function getDemographics(
   params: TimeRangeRequest,
 ): Promise<DemographicsResponse> {
   return apiRequest<DemographicsResponse>("/api/analytics/demographics", {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
+}
+
+// Crowd Entries Page
+
+export function getEntryExitSessions(
+  params: EntryExitRequest,
+): Promise<EntryExitResponse> {
+  return apiRequest<EntryExitResponse>("/api/analytics/entry-exit", {
     method: "POST",
     body: JSON.stringify(params),
   });

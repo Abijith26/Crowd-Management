@@ -230,12 +230,9 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen min-w-0">
       <header className="border-b border-slate-200 bg-white px-4 py-5 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight text-slate-950">
-              Overview
-            </h1>
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-sm text-slate-700 font-bold">
               Monitor occupancy and visitor activity for a site.
             </p>
           </div>
