@@ -168,4 +168,3 @@ The `vercel.json` configuration supports client-side routing so routes such as `
 
 **Abijith M**
 
-GitHub: https://github.com/Abijith26
