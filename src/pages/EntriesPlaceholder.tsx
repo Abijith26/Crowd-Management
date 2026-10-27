@@ -488,8 +488,7 @@ export default function EntriesPlaceholder() {
 
         <p className="text-xs leading-5 text-slate-500">
           Entry and exit timestamps are provided by the API in the selected
-          site's local time. Sessions without an exit time are still in
-          progress.
+          site's local time.
         </p>
 
         {loading && (

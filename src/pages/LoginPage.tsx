@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Activity,
   ArrowRight,
@@ -14,6 +14,9 @@ import { login } from "@/services/auth";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const sessionExpired = searchParams.get("reason") === "session-expired";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -123,9 +126,19 @@ export default function LoginPage() {
             </div>
 
             <div className="mb-8">
-              <h2 className="text-3xl font-semibold tracking-tight text-slate-950 sm:text-4xl">
+              <h2 className="font-semibold tracking-tight text-slate-950 text-xl">
                 Welcome to the Crowd Management System
               </h2>
+
+              {sessionExpired && (
+                <div
+                  role="status"
+                  aria-live="polite"
+                  className="mt-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-5 text-amber-800"
+                >
+                  Your session has expired. Please log in again.
+                </div>
+              )}
 
               <div className="mt-8 flex items-center gap-3 rounded-xl border border-slate-200 bg-white p-4">
                 <ShieldCheck
@@ -251,11 +264,6 @@ export default function LoginPage() {
                 )}
               </button>
             </form>
-
-            <p className="mt-8 text-center text-xs text-slate-400">
-              © {new Date().getFullYear()} Crowd Management System. All rights
-              reserved.
-            </p>
           </div>
         </section>
       </div>

@@ -679,46 +679,48 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl space-y-6">
-        <header className="flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
-          <div className="flex flex-col gap-3 sm:flex-row ">
-            <label className="flex flex-col gap-1 text-xs font-medium text-slate-600">
-              Site
-              <select
-                value={selectedSiteId}
-                onChange={(event) => {
-                  setSelectedSiteId(event.target.value);
-                }}
-                disabled={sitesLoading || !hasAnySite}
-                className="min-w-48 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-slate-400"
-              >
-                {sites.length === 0 && (
-                  <option value="">No sites available</option>
-                )}
+        <header className="flex flex-col justify-between gap-4 lg:flex-row lg:items-center lg:justify-end">
+          <div className="flex max-w-full flex-col gap-4 xl:flex-row xl:items-center ">
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <label className="flex flex-col gap-1 text-xs font-medium text-slate-600">
+                <span className="sr-only">Select site</span>
+                <select
+                  value={selectedSiteId}
+                  onChange={(event) => {
+                    setSelectedSiteId(event.target.value);
+                  }}
+                  disabled={sitesLoading || !hasAnySite}
+                  className="min-w-48 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-slate-400"
+                >
+                  {sites.length === 0 && (
+                    <option value="">No sites available</option>
+                  )}
 
-                {sites.map((site) => (
-                  <option key={site.siteId} value={site.siteId}>
-                    {site.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+                  {sites.map((site) => (
+                    <option key={site.siteId} value={site.siteId}>
+                      {site.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-            <label className="flex flex-col gap-1 text-xs font-medium text-slate-600">
-              Historical chart range
-              <select
-                value={range}
-                onChange={(event) => {
-                  setRange(event.target.value as RangeOption);
-                }}
-                className="min-w-44 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-slate-400"
-              >
-                {RANGE_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <label className="flex flex-col gap-1 text-xs font-medium text-slate-600">
+                <span className="sr-only">Time range</span>
+                <select
+                  value={range}
+                  onChange={(event) => {
+                    setRange(event.target.value as RangeOption);
+                  }}
+                  className="min-w-44 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 outline-none focus:border-slate-400"
+                >
+                  {RANGE_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
           </div>
         </header>
 
