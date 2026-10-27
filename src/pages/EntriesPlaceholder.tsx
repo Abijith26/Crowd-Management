@@ -15,6 +15,11 @@ import type { EntryExitResponse, Site } from "@/types/analytics";
 
 type RangeOption = "24h" | "7d" | "30d";
 
+type TimeWindow = {
+  fromUtc: number;
+  toUtc: number;
+};
+
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
 function getTimeRange(range: RangeOption) {
@@ -66,6 +71,9 @@ export default function EntriesPlaceholder() {
   const [sites, setSites] = useState<Site[]>([]);
   const [selectedSiteId, setSelectedSiteId] = useState("");
   const [range, setRange] = useState<RangeOption>("24h");
+  const [timeWindow, setTimeWindow] = useState<TimeWindow>(() =>
+    getTimeRange("24h"),
+  );
   const [pageSize, setPageSize] = useState(10);
   const [pageNumber, setPageNumber] = useState(1);
   const [result, setResult] = useState<EntryExitResponse | null>(null);
@@ -132,17 +140,17 @@ export default function EntriesPlaceholder() {
       setResult(null);
 
       try {
-        const { fromUtc, toUtc } = getTimeRange(range);
-
         const response = await getEntryExitSessions({
           siteId: selectedSiteId,
-          fromUtc,
-          toUtc,
+          fromUtc: timeWindow.fromUtc,
+          toUtc: timeWindow.toUtc,
           pageSize,
           pageNumber,
         });
 
-        if (!cancelled) setResult(response);
+        if (!cancelled) {
+          setResult(response);
+        }
       } catch (err) {
         if (!cancelled) {
           setError(
@@ -152,7 +160,9 @@ export default function EntriesPlaceholder() {
           );
         }
       } finally {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+        }
       }
     }
 
@@ -161,10 +171,11 @@ export default function EntriesPlaceholder() {
     return () => {
       cancelled = true;
     };
-  }, [selectedSiteId, range, pageSize, pageNumber, retryKey]);
+  }, [selectedSiteId, timeWindow, pageSize, pageNumber, retryKey]);
 
   function changeRange(value: RangeOption) {
     setRange(value);
+    setTimeWindow(getTimeRange(value));
     setPageNumber(1);
   }
 
