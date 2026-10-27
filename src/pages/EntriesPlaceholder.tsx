@@ -38,7 +38,7 @@ function getTimeRange(range: RangeOption) {
 }
 
 function formatDwell(minutes: number | null) {
-  if (minutes == null) return "In progress";
+  if (minutes == null) return "-";
 
   if (minutes < 60) {
     return `${Math.round(minutes)} min`;
@@ -404,7 +404,7 @@ export default function EntriesPlaceholder() {
                         </td>
                         <td className="whitespace-nowrap px-4 py-4 text-slate-600">
                           {record.exitLocal ?? (
-                            <span className="text-amber-700">In progress</span>
+                            <span className="text-amber-700">-</span>
                           )}
                         </td>
                         <td className="whitespace-nowrap px-4 py-4">
