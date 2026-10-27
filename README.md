@@ -2,7 +2,7 @@
 
 A web dashboard for monitoring crowd occupancy, reviewing visitor activity, and understanding crowd patterns across different sites.
 
-The project was built as part of a Kloudspot coding assignment. It connects to the provided APIs to display historical analytics and uses Socket.IO for real-time updates.
+It connects to the provided APIs to display historical analytics and uses Socket.IO for real-time updates.
 
 **Live Demo:** https://crowd-management-phi.vercel.app
 
